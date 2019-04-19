@@ -414,7 +414,11 @@ int main(int argc, char** arg){
 						close(allpd[0][1]);
 						delete []in;
 						delete []out;
-						execvp(argv[0], argv);
+						if(-1==execvp(argv[0], argv)){
+							dup2(stdout_copy,1);
+							printf("ERROR %s \n", strerror(errno));
+							exit(1);
+						}
 					}
 					else if(length==stmts.size()-1){
 						//printf("allpd[0][0] %d \n", allpd[0][0]);
@@ -432,7 +436,11 @@ int main(int argc, char** arg){
                                         		dup2(ostr,1);
 							delete []in;
 							delete []out;
-							execvp(argv[0], argv);
+							if(-1==execvp(argv[0], argv)){
+								dup2(stdout_copy, 1);
+								printf("ERROR %s \n", strerror(errno));
+								exit(1);
+							}
 						}
 						else{ 
 							//printf("in the last argument redirect read is: %d \n", allpd[length-1][0]);
